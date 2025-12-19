@@ -23,15 +23,23 @@ val ffmpegModuleExists = project.file("libs/lib-decoder-ffmpeg-release.aar").exi
 
 val gitTags =
     providers
-        .exec { commandLine("git", "tag", "--list", "v*", "p*") }
+        .exec {
+            commandLine("git", "tag", "--list", "v*", "p*")
+            isIgnoreExitValue = true // Prevents crash if this fails
+        }
         .standardOutput.asText
-        .get()
+        .getOrElse("") // Safely return empty string on failure
 
 val gitDescribe =
     providers
-        .exec { commandLine("git", "describe", "--tags", "--long", "--match=v*") }
+        .exec {
+            commandLine("git", "describe", "--tags", "--long", "--match=v*")
+            isIgnoreExitValue = true // Prevents crash if no tags exist
+        }
         .standardOutput.asText
+        .map { it.trim() }
         .getOrElse("v0.0.0")
+        .let { it.ifBlank { "v0.0.0" } } // Fallback if output was empty
 
 android {
     namespace = "com.github.damontecres.wholphin"
