@@ -365,7 +365,10 @@ fun HomePageContent(
                                             item = item,
                                             aspectRatio = AspectRatios.TALL,
                                             cornerText =
-                                                item?.data?.indexNumber?.let { "E$it" }
+                                                item?.data?.indexNumber?.let { episode ->
+                                                    val season = item.data.parentIndexNumber
+                                                    "S%02d E%02d".format(season, episode)
+                                                }
                                                     ?: item?.data?.childCount?.let { if (it > 0) it.toString() else null },
                                             played = item?.data?.userData?.played ?: false,
                                             favorite = item?.favorite ?: false,
