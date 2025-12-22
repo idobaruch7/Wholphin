@@ -185,8 +185,8 @@ class LiveTvViewModel
         ) = mutex.withLock {
             val zone = ZoneId.systemDefault() // Get device's timezone
             val guideStartUtc = guideStart
-                .atZone(zone) // This 17:00 is actually 17:00 Jerusalem time
-                .withZoneSameInstant(ZoneOffset.UTC) // Convert to UTC (15:00)
+                .atZone(zone) // This 17:00 is actually 17:00 CURRENT ZONE time
+                .withZoneSameInstant(ZoneOffset.UTC) // Convert to UTC ( for example UTC+2 -> 15:00)
                 .toLocalDateTime() // Strip the zone info
 
             val maxStartDate = guideStartUtc.plusHours(MAX_HOURS).minusMinutes(1)
